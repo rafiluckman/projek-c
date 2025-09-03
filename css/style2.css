@@ -1,0 +1,293 @@
+/* RESET */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: "Delius", cursive;
+}
+
+/* BACKGROUND */
+.bg-container {
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  overflow: hidden;
+}
+.bg-image {
+  position: absolute;
+  inset: 0;
+  background-size: cover;
+  background-position: center;
+  opacity: 0;
+  transition: opacity 1s ease-in-out;
+}
+.bg-image.active {
+  opacity: 1;
+}
+.kenburns {
+  animation: bgKen 8s ease-out forwards;
+}
+@keyframes bgKen {
+  from { transform: scale(1.08); }
+  to { transform: scale(1); }
+}
+
+/* GALERI */
+.gallery-container {
+  display: flex;
+  gap: 60px;
+  align-items: center;
+  max-width: 1200px;
+  z-index: 5;
+}
+
+/* DESKRIPSI */
+.description-box {
+  flex: 1;
+  color: #fff;
+  padding: 20px;
+  transition: transform 0.4s ease, opacity 0.4s ease;
+}
+.description-box h2 {
+  font-size: 28px;
+  margin-bottom: 12px;
+}
+.description-box p {
+  font-size: 17px;
+  line-height: 1.8;
+  max-width: 380px;
+}
+
+/* FOTO */
+.photo-box {
+  flex: 2;
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+}
+.photo-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+.photo-wrapper img {
+  border-radius: 14px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+  cursor: pointer;
+  transition: transform 0.4s ease;
+}
+
+/* FOTO UTAMA */
+#main-photo {
+  width: 400px;
+  max-height: 450px;
+  object-fit: cover;
+  background: transparent;
+  border: none;
+  z-index: 2;
+}
+
+/* PREVIEW FOTO */
+#preview-photo {
+  position: absolute;
+  left: 420px;
+  top: 50%;
+  transform: translateY(-50%) scale(1);
+  width: 200px;
+  height: auto;
+  opacity: 0.7;
+  filter: blur(5px);
+  object-fit: cover;
+  border-radius: 12px;
+  background: transparent;
+  border: none;
+  z-index: 1;
+  pointer-events: none;
+  transition: transform 0.5s ease, opacity 0.5s ease;
+}
+
+/* TOMBOL */
+.controls {
+  position: fixed;
+  bottom: 30px;
+  right: 40px;
+  display: flex;
+  gap: 14px;
+}
+.nav-btn {
+  background: #00f7ff;
+  color: #fff;
+  font-size: 26px;
+  font-weight: bold;
+  border: none;
+  padding: 14px 18px;
+  border-radius: 50%;
+  cursor: pointer;
+  transition: transform 0.3s ease, background 0.3s ease;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.3);
+}
+.nav-btn:hover {
+  transform: scale(1.15);
+  background: #00c8d9;
+}
+
+/* FOTO & DESKRIPSI ANIMASI */
+.photo-out-left { animation: outLeft 0.26s ease forwards; }
+.photo-out-right { animation: outRight 0.26s ease forwards; }
+.photo-in-right { animation: inRight 0.55s cubic-bezier(.2,.8,.2,1) forwards; }
+.photo-in-left { animation: inLeft 0.55s cubic-bezier(.2,.8,.2,1) forwards; }
+
+/* KELUAR */
+@keyframes outLeft {
+  from { transform: translateX(0); opacity: 1; filter: blur(0); }
+  to { transform: translateX(-36px); opacity: 0; filter: blur(6px); }
+}
+@keyframes outRight {
+  from { transform: translateX(0); opacity: 1; filter: blur(0); }
+  to { transform: translateX(36px); opacity: 0; filter: blur(6px); }
+}
+
+/* MASUK */
+@keyframes inRight {
+  from { transform: translateX(46px) scale(1.05); opacity: 0; filter: blur(6px); }
+  to { transform: translateX(0) scale(1); opacity: 1; filter: blur(0); }
+}
+@keyframes inLeft {
+  from { transform: translateX(-46px) scale(1.05); opacity: 0; filter: blur(6px); }
+  to { transform: translateX(0) scale(1); opacity: 1; filter: blur(0); }
+}
+
+/* PREVIEW SINKRON */
+.preview-next { animation: previewNext 0.45s ease-out forwards; }
+@keyframes previewNext {
+  from { transform: translate(30px, -50%) scale(.95); opacity: 0; }
+  to { transform: translate(0, -50%) scale(1); opacity: 0.7; }
+}
+.preview-prev { animation: previewPrev 0.45s ease-out forwards; }
+@keyframes previewPrev {
+  from { transform: translate(-30px, -50%) scale(.95); opacity: 0; }
+  to { transform: translate(0, -50%) scale(1); opacity: 0.7; }
+}
+
+/* LIGHTBOX */
+.lightbox {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.85);
+  justify-content: center;
+  align-items: center;
+  z-index: 999;
+}
+.lightbox img {
+  max-width: 85%;
+  max-height: 85%;
+  border-radius: 10px;
+  box-shadow: 0 0 30px rgba(0, 0, 0, 0.6);
+}
+.close {
+  position: absolute;
+  top: 15px;
+  right: 25px;
+  color: #fff;
+  font-size: 40px;
+  cursor: pointer;
+  transition: 0.3s;
+}
+.close:hover { color: #00f7ff; }
+
+/* BODY FULL CENTER */
+body {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  background: transparent;
+  overflow: hidden;
+}
+
+/* GALERI DI TENGAH */
+.gallery-container {
+  display: flex;
+  gap: 60px;
+  align-items: center;
+  max-width: 1200px;
+  z-index: 5;
+}
+
+.description-box {
+  flex: 1;
+  color: #fff;
+  padding: 22px;
+  border-radius: 16px;
+  background: rgba(255, 255, 255, 0.08);
+  backdrop-filter: blur(12px);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.description-box:hover {
+  transform: scale(1.02);
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
+}
+
+.description-box {
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  box-shadow: 0 0 20px rgba(56, 1, 255, 0.25),
+              0 0 40px rgba(0, 247, 255, 0.15);
+}
+
+.description-box h2 {
+  font-size: 26px;
+  margin-bottom: 8px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.description-box p {
+  font-size: 16px;
+  line-height: 1.7;
+  max-width: 380px;
+  padding-top: 6px;
+  border-top: 1px solid rgba(255, 255, 255, 0.15);
+}
+
+.desc-in {
+  animation: descIn 0.6s cubic-bezier(.25,.8,.25,1) forwards;
+}
+@keyframes descIn {
+  from {
+    transform: translateY(15px);
+    opacity: 0;
+    filter: blur(6px);
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+    filter: blur(0);
+  }
+}
+
+/* --- HALAMAN MUNCUL SMOOTH --- */
+body {
+  opacity: 0;
+  transform: translateY(20px);
+  transition: opacity 0.8s ease, transform 0.8s ease;
+}
+
+/* Setelah halaman siap, tampilkan */
+body.loaded {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+
+.description-box {
+  background: rgba(0, 0, 0, 0.4); /* transparan */
+  padding: 16px;
+  border-radius: 14px;
+  backdrop-filter: blur(6px); /* efek blur kaca */
+  color: #fff;
+}

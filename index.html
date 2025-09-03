@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Hai Cantik</title>
+  <link rel="stylesheet" href="/css/style.css">
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600&display=swap" rel="stylesheet">
+  <link rel="icon" type="image/png" href="/assets/imut-removebg-preview.png" />
+</head>
+<body>
+  <div class="home-container">
+
+    <!-- Bagian karakter -->
+    <div class="character">
+      <!-- Speech bubble -->
+      <div class="speech-container">
+        <img src="/assets/bb.png" alt="Speech Bubble" class="bubble">
+        <span id="bubble-text" class="bubble-text cursor"></span>
+      </div>
+
+      <!-- Kucing -->
+      <img src="/assets/kucing.webp" alt="Kucing Imut" class="cat">
+    </div>
+      <!-- Musik Background -->
+    <audio id="bg-music" src="/assets/miaw.mp3" autoplay loop></audio>
+    <!-- Tombol -->
+    <a href="index2.html" class="btn">Open</a>
+  </div>
+  <!-- JS kecil untuk efek mengetik -->
+  <script>
+    document.addEventListener("DOMContentLoaded", () => {
+      const el = document.getElementById("bubble-text");
+      const text = "I want to say something.";
+      let i = 0;
+
+      setTimeout(() => {
+        const typing = setInterval(() => {
+          el.textContent += text.charAt(i);
+          i++;
+          if (i === text.length) {
+            clearInterval(typing);
+            el.classList.remove("cursor"); // matiin kursor setelah selesai
+          }
+        }, 60); // kecepatan ngetik
+      }, 400); // jeda kecil sebelum mulai
+    });
+  </script>
+</body>
+</html>

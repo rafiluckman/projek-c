@@ -1,0 +1,567 @@
+/* RESET */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: 'Montserrat', sans-serif;
+}
+
+/* Stabilkan layout + kasih background penuh */
+html {
+  min-height: 100%;
+  background: linear-gradient(135deg, #1e3c72, #016868);
+  scrollbar-gutter: stable; /* diganti dari both-edges → biar gak ada bar putih */
+}
+
+/* === HALAMAN PERTAMA === */
+body {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;      /* biar auto tinggi penuh */
+  background: transparent; /* supaya pake background dari html */
+  
+}
+
+/* Container khusus index.html */
+.home-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  text-align: center;
+  gap: 20px;
+
+  /* hapus background di sini → biar gak muncul panel tengah */
+  background: none;
+}
+
+/* Efek typing (halaman lain) */
+.typing-text {
+  font-size: 24px;
+  font-weight: 600;
+  color: #000;
+  margin-bottom: 20px;
+  white-space: nowrap;
+  overflow: hidden;
+  border-right: 3px solid #000;
+  width: 0;
+  animation: typing 3s steps(26, end) forwards, blink 0.6s step-end infinite alternate;
+}
+
+@keyframes typing { from { width: 0; } to { width: 20ch; } }
+@keyframes blink  { 50% { border-color: transparent; } }
+
+/* Tombol "Open" */
+.btn {
+  display: block;
+  margin-top: 20px;
+  padding: 10px 25px;
+  font-size: 20px;
+  font-weight: 600;
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  text-decoration: none;
+  cursor: pointer;
+  background: linear-gradient(90deg, #42f5b9, #5cf2d6);
+  opacity: 0;
+  transform: scale(0.5);
+  animation: popUp 0.5s ease forwards;
+  animation-delay: 3.2s;
+}
+@keyframes popUp { to { opacity: 1; transform: scale(1); } }
+
+/* === HALAMAN KEDUA === */
+.gallery-container {
+  display: flex;
+  gap: 40px;
+  width: min(1200px, 92vw);
+  margin: 40px auto;
+  padding: 20px;
+  align-items: flex-start;
+}
+
+/* Kolom kiri (teks) */
+.text-content {
+  flex: 1 1 52%;
+  max-width: 52%;
+  text-align: left;
+  font-size: 16px;
+  line-height: 1.6;
+  min-width: 0;
+}
+
+/* Paragraf yang diketik */
+#typing {
+  display: block;
+  overflow-wrap: anywhere;
+  word-break: break-word;
+  font-family: 'Nunito', sans-serif;
+  font-size: 19px; /* 🔹 Ganti angka sesuai keinginanmu */
+  line-height: 1.8; /* 🔹 Supaya lebih rapi */
+}
+
+/* Kolom kanan (foto) */
+.photo-gallery {
+  flex: 0 0 400px;
+  position: relative;
+  perspective: 1500px;
+  height: 360px;
+  isolation: isolate;
+  margin-top: 300px; /* ✅ Tambahkan ini untuk menurunkan semua foto */
+}
+
+
+.photo {
+  position: absolute;
+  cursor: pointer;
+  display: block;
+  width: 250px;
+  height: 300px;
+  box-shadow: 0 10px 20px rgba(0,0,0,0.15);
+  border: 8px solid #fff;
+  transition: transform 0.35s ease, box-shadow 0.35s ease;
+  background: #fff;
+  border-radius: 6px;
+  overflow: hidden;
+  transform-style: preserve-3d;
+}
+
+.photo img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  user-select: none;
+  cursor: pointer;
+}
+
+/* Efek hover */
+.photo:hover,
+.photo:focus {
+  transform: translateY(-20px) translateZ(50px) rotateX(10deg) rotateY(10deg);
+  box-shadow: 0 20px 40px rgba(0,0,0,0.3);
+  z-index: 10;
+}
+
+/* Posisi foto */
+.photo1 { top: 30%; left: -50px; transform-origin: bottom left; transform: rotate(-12deg); }
+.photo2 { top: -100px; right: 100px; transform-origin: top right; transform: rotate(15deg); }
+.photo3 { bottom: 200px; right: 30px; transform-origin: bottom right; transform: rotate(12deg); }
+.photo4 { top: 80px; left: 210px; transform-origin: top left; transform: rotate(-15deg); }
+.photo5 { top: 120px; left: 150px; transform-origin: top left; transform: rotate(10deg); }
+
+.photo.active {
+  transform: translateZ(100px) translateY(-30px) rotateX(20deg) rotateY(20deg);
+  box-shadow: 0 25px 50px rgba(0,0,0,0.5);
+  z-index: 20 !important;
+}
+
+/* Tombol Next halaman */
+.btn2 {
+  position: absolute;
+  bottom: 0;
+  right: 350;
+  left: -100%;
+  display: inline-block;
+  padding: 10px 24px;
+  border-radius: 10px;
+  color: #fff;
+  background:#40e0c0;
+  font-weight: 600;
+  text-decoration: none;
+  transition: opacity .45s ease, transform .45s ease, filter .2s ease;
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(8px);
+  pointer-events: none;
+}
+.btn2.show{
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0);
+  pointer-events: auto;
+}
+.btn2:hover{ filter: brightness(1.06); }
+
+/* Responsif */
+@media (max-width: 768px) {
+  .gallery-container { flex-direction: column; width: min(700px, 92vw); }
+  .text-content { max-width: 100%; flex-basis: auto; }
+  .photo-gallery {
+    flex: none;
+    width: 100%;
+    height: 300px;
+    margin-top: 20px;
+  }
+  .photo {
+    position: relative;
+    margin: 0 10px 20px 10px;
+    transform: none !important;
+    box-shadow: 0 6px 12px rgba(0,0,0,0.12);
+  }
+  .btn2 { position: relative; bottom: auto; right: auto; }
+}
+
+/* === LIGHTBOX === */
+.lightbox {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.9);
+  display: none;
+  justify-content: center;
+  align-items: center;
+  z-index: 10000;
+  flex-direction: column;
+}
+
+.lightbox img {
+  max-width: 90%;
+  max-height: 80%;
+  transition: transform 0.2s ease;
+  border-radius: 10px;
+  box-shadow: 0 0 25px rgba(0, 0, 0, 0.7);
+  cursor: grab;
+}
+
+.close {
+  position: absolute;
+  top: 20px;
+  right: 30px;
+  color: #fff;
+  font-size: 40px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: 0.3s;
+  z-index: 10001;
+}
+.close:hover { color: #ff5252; }
+
+.nav-btn {
+  position: absolute;
+  top: 50%;
+  color: white;
+  font-size: 40px;
+  cursor: pointer;
+  padding: 10px 15px;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 6px;
+  user-select: none;
+  transition: background 0.3s ease;
+}
+.nav-btn:hover { background: rgba(255, 255, 255, 0.3); }
+.prev { left: 30px; transform: translateY(-50%); }
+.next { right: 30px; transform: translateY(-50%); }
+
+/* ====== HOME (kucing + bubble) ====== */
+.character {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+}
+.speech-container { position: relative; width: min(520px, 85vw); }
+.bubble { width: 100%; height: auto; display: block; filter: drop-shadow(0 6px 12px rgba(0,0,0,.35)); }
+
+.bubble-text {
+  position: absolute;
+  top: 40%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 600%;
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 600;
+  font-size: clamp(14px, 2.2vw, 22px);
+  color: #000;
+  text-align: center;
+  white-space: nowrap;
+  overflow: hidden;
+  border-right: 3px solid #000;
+}
+
+.cursor { animation: blink 0.7s step-end infinite; }
+@keyframes blink { 50% { border-color: transparent; } }
+
+.cat {
+  width: min(360px, 60vw);
+  height: auto;
+  display: block;
+}
+
+/* tombol “Open” (fallback) */
+.btn {
+  display: inline-block;
+  padding: 10px 24px;
+  border-radius: 10px;
+  color: #fff;
+  background: #40e0c0;
+  font-weight: 600;
+  text-decoration: none;
+  transition: .2s transform ease;
+}
+.btn:hover { transform: scale(1.05); }
+
+/* ==== Styling khusus paragraf Lorem Ipsum ==== */
+.text-content {
+  flex: 1 1 52%;
+  max-width: 52%;
+  text-align: left;
+  font-size: 18px;
+  line-height: 1.8;
+  min-width: 0;
+  padding: 20px;                      /* Ruang di dalam box */
+  border: 2px solid rgba(255, 255, 255, 0.25); /* Border tipis semi-transparan */
+  border-radius: 12px;               /* Sudut melengkung biar soft */
+  background: rgba(255, 255, 255, 0.05); /* Efek kaca transparan */
+  backdrop-filter: blur(6px);         /* Blur lembut untuk kesan modern */
+  box-shadow: 0 6px 15px rgba(0, 0, 0, 0.25); /* Bayangan lembut */
+  transition: all 0.3s ease;
+}
+
+/* Efek hover biar lebih interaktif */
+.text-content:hover {
+  border-color: rgba(255, 255, 255, 0.6);
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.35);
+  transform: translateY(-3px);
+}
+
+/* Styling teks paragraf yang diketik */
+#typing {
+  font-family: 'Nunito', sans-serif;
+  font-size: 20px;      /* Perbesar sedikit biar enak dibaca */
+  color: #fff;          /* Biar kontras sama background */
+}
+
+/* ==== BACKGROUND ANIMASI ==== */
+body {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  background: linear-gradient(-45deg, #1e3c72, #016868, #0f2027, #2c5364);
+  background-size: 400% 400%;
+  animation: gradientBG 15s ease infinite;
+  position: relative;
+  overflow: hidden;
+}
+
+/* Animasi background gradient */
+@keyframes gradientBG {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+/* ==== EFEK BOKEH UNTUK HIASAN ==== */
+.bokeh {
+  position: absolute;
+  width: 250px;
+  height: 250px;
+  background: rgba(255, 255, 255, 0.15);
+  border-radius: 50%;
+  filter: blur(80px);
+  animation: moveBokeh 20s infinite alternate ease-in-out;
+  z-index: 0;
+}
+
+.bokeh:nth-child(1) {
+  top: 10%;
+  left: 5%;
+  background: rgba(255, 255, 255, 0.12);
+  animation-duration: 25s;
+}
+
+.bokeh:nth-child(2) {
+  bottom: 15%;
+  right: 8%;
+  background: rgba(255, 255, 255, 0.18);
+  animation-duration: 30s;
+}
+
+.bokeh:nth-child(3) {
+  top: 40%;
+  right: 20%;
+  background: rgba(255, 255, 255, 0.1);
+  animation-duration: 35s;
+}
+
+/* Gerakan lembut untuk bokeh */
+@keyframes moveBokeh {
+  0% { transform: translateY(0) translateX(0) scale(1); }
+  50% { transform: translateY(-60px) translateX(40px) scale(1.2); }
+  100% { transform: translateY(20px) translateX(-30px) scale(1); }
+}
+
+/* ==== CARD TEKS (LOREM IPSUM) ==== */
+.text-content {
+  flex: 1 1 52%;
+  max-width: 52%;
+  text-align: left;
+  font-size: 18px;
+  line-height: 1.8;
+  min-width: 0;
+  padding: 25px;
+  border: 2px solid rgba(255, 255, 255, 0.25);
+  border-radius: 14px;
+  background: rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(10px);
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.3);
+  transition: all 0.4s ease;
+  position: relative;
+  z-index: 1;
+}
+
+/* Hover efek lebih elegan */
+.text-content:hover {
+  border-color: rgba(255, 255, 255, 0.6);
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.4);
+  transform: translateY(-3px) scale(1.02);
+}
+
+/* Teks di dalam paragraf */
+#typing {
+  font-family: 'Nunito', sans-serif;
+  font-size: 20px;
+  color: #fff;
+}
+
+#typing {
+  display: block;
+  font-size: 17px;
+  line-height: 1.8;
+  color: #f1f1f1;
+  font-family: 'Nunito', sans-serif;
+  text-align: justify;
+  white-space: pre-line;
+  padding: 18px 22px;
+  background: rgba(0, 0, 0, 0.3);
+  border-radius: 12px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+  backdrop-filter: blur(4px);
+  transition: all 0.3s ease-in-out;
+}
+
+#typing:hover {
+  background: rgba(0, 0, 0, 0.5);
+  transform: scale(1.01);
+}
+
+body {
+  display: flex;
+  justify-content: center;
+  align-items: flex-start; /* ✅ Biar konten mulai dari atas */
+  min-height: 100vh;
+  background: linear-gradient(-45deg, #064232, #568F87, #F5BABB, #FFF5F2);
+  background-size: 400% 400%;
+  animation: gradientBG 15s ease infinite;
+  position: relative;
+  overflow-y: auto; /* ✅ Aktifkan scroll vertikal */
+  overflow-x: hidden; /* ✅ Hilangkan scroll horizontal */
+}
+
+/* ==== FOTO BARU DI KIRI ==== */
+.side-photo {
+  flex: 0 0 260px;
+  display: flex;
+  justify-content: flex-start; /* Foto agak nempel kiri */
+  align-items: flex-start;
+  margin-right: 50px; /* Jarak antara foto kiri dan teks */
+  margin-left: -250px; /* Geser sedikit ke kiri */
+  position: relative;
+  animation: fadeIn 1.2s ease-out forwards;
+}
+
+.side-photo img {
+  width: 150%;
+  max-width: 250px;
+  height: auto;
+  border-radius: 16px;
+  box-shadow: 0 0 20px rgba(0, 255, 200, 0.3);
+  border: 3px solid rgba(255, 255, 255, 0.15);
+  transition: transform 0.35s ease, box-shadow 0.35s ease, border 0.35s ease;
+  cursor: pointer;
+}
+
+/* Efek glow animasi */
+.side-photo img:hover {
+  transform: scale(1.05);
+  box-shadow: 0 0 25px rgba(0, 255, 200, 0.7), 0 0 50px rgba(0, 255, 200, 0.5);
+  border: 3px solid rgba(0, 255, 200, 0.7);
+}
+
+/* ==== PERBAIKAN POSISI TEKS ==== */
+.text-content {
+  flex: 1 1 50%;
+  max-width: 50%;
+  text-align: left;
+  padding: 20px;
+  border: 2px solid rgba(255, 255, 255, 0.25);
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(6px);
+  box-shadow: 0 6px 15px rgba(0, 0, 0, 0.25);
+  transition: all 0.3s ease;
+}
+
+/* ==== PERBAIKAN UNTUK LAYAR KECIL ==== */
+@media (max-width: 900px) {
+  .gallery-container {
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+  }
+
+  .side-photo {
+    margin: 10px 0 20px 0;
+    justify-content: center;
+  }
+
+  .side-photo img {
+    max-width: 220px;
+  }
+
+  .text-content {
+    max-width: 90%;
+    padding: 18px;
+    text-align: center;
+  }
+}
+
+/* ==== TOMBOL LANJUT ==== */
+.button-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 25px;
+  margin-left: -10px; /* 🔹 Geser tombol agak ke kiri biar pas di tengah */
+  opacity: 0;
+  transform: scale(0.5);
+  transition: all 0.5s ease;
+}
+
+.button-container.show {
+  opacity: 1;
+  transform: scale(1);
+}
+
+.choice-btn {
+  padding: 12px 26px;
+  font-size: 16px;
+  font-weight: 600;
+  border-radius: 8px;
+  border: none;
+  cursor: pointer;
+  background: linear-gradient(135deg, #e5a2d7, #d0a8ff);
+  color: #fff;
+  box-shadow: 0 6px 15px rgba(0, 0, 0, 0.25);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  text-decoration: none;
+}
+
+.choice-btn:hover {
+  transform: scale(1.08);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.35);
+}
+

@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Di Baca Yaw</title>
+    <link rel="stylesheet" href="/css/style.css" />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Delius&family=Nunito:ital,wght@0,200..1000;1,200..1000&display=swap" rel="stylesheet">
+    <link rel="icon" type="image/png" href="/assets/imut-removebg-preview.png" />
+</head>
+<body>
+    <div class="gallery-container">
+        <!-- FOTO KIRI -->
+        <div class="side-photo">
+            <img src="/assets/sigma.jpeg" alt="Foto Spesial" />
+        </div>
+
+        <!-- TEKS PESAN -->
+        <div class="text-content">
+            <p id="typing"></p>
+
+            <!-- TOMBOL LANJUT -->
+            <div class="button-container" id="choiceButtons" style="display:none;">
+                <a href="index3.html" class="choice-btn">Lanjut Ga Nih?</a>
+            </div>
+        </div>
+
+        <!-- FOTO GALERI -->
+        <div class="photo-gallery">
+            <a href="#" class="photo photo1"><img src="/assets/11.png" alt="Foto 1" /></a>
+            <a href="#" class="photo photo2"><img src="/assets/22.png" alt="Foto 2" /></a>
+            <a href="#" class="photo photo3"><img src="/assets/33.png" alt="Foto 3" /></a>
+            <a href="#" class="photo photo4"><img src="/assets/44.png" alt="Foto 4" /></a>
+            <a href="#" class="photo photo5"><img src="/assets/cipau.jpeg" alt="Foto 5" /></a>
+        </div>
+    </div>
+
+    <!-- LIGHTBOX -->
+    <div id="lightbox" class="lightbox">
+        <span id="closeBtn" class="close">&times;</span>
+        <img id="lightboxImg" src="" alt="Preview Foto" />
+        <div class="nav-btn prev" id="prevBtn">&#10094;</div>
+        <div class="nav-btn next" id="nextBtn">&#10095;</div>
+    </div>
+
+    <!-- MUSIK BACKGROUND -->
+    <audio id="bg-music" src="/assets/1.mp3" autoplay loop></audio>
+
+    <!-- SCRIPT TYPEWRITER + TOMBOL -->
+    <script>
+  const text = `Hai Cipaa… aku cuman mau bilang kalau aku kangennn bangett sama kamuu ❤️
+
+Dan maap ya, ngungkapinnya lewat website kayak gini hehe. Aku sekalian belajar sebenernya,
+dan kebetulan ini sudah jadi, makanya aku kasih ke kamu.
+
+Pada intinya aku cuman mau bilang kalau aku sayang bangettttt sama kamuuu.
+Mungkin hari-hari tanpa kamu tuh sekarang rasanya jadi beda di aku.
+Yang ritmenya tiap hari aku ada apa-apa biasanya ngabarin kamu, eh sekarang ga ada lagi yang bisa dikabarin.
+
+Aku tau banget kalau aku salah berat dalam masalah ini di mulai dari salah paham hari kamis kemarin,dan ntah dulu karena aku sering ngebentak kamu dll,
+dan mungkin ini titik penyesalan terbesar ku dalam hidupku
+menerima kalau kamu emang udah pergi. Aku ga pernah capek ngadepin kamu kok, bahkan selalu berharap kalau tiba malam
+ya waktunya kita vois di Discord, walaupun malam Kamis kemarin ya malam kita terakhir ngobrol.
+
+Aku gatau ya kenapa aku bisa chat kamu gini. Aku rasa karena aku pengen ngungkapin semua yang aku rasain,
+karena aku udah gatau lagi mau ngadu ke siapa.
+
+Dan terakhir, yang kayak aku bilang tadi, aku sayang banget sama kamu dan peduli bangett.
+Dan kalau aku dikasih kesempatan untuk memperbaiki ini, aku bakal bersyukur pernah punya kamu.
+
+Makasih ya, Cipaa Auliaa 💙`;
+
+  const typingElement = document.getElementById("typing");
+  let i = 0;
+
+  // Frasa yang ingin diberi jeda:
+  const pausePhrases = [
+    { phrase: "Hai Cipaa…", delay: 1000 },
+    { phrase: "aku cuman mau bilang", delay: 1000 },
+    { phrase: "kalau aku kangennn bangett", delay: 1000 },
+  ];
+
+  // Hitung index jeda dari teks (akhir frasa), sort, dan pakai sebagai antrean
+  const pausePoints = pausePhrases
+    .map(p => {
+      const idx = text.indexOf(p.phrase);
+      return idx >= 0 ? { index: idx + p.phrase.length, delay: p.delay } : null;
+    })
+    .filter(Boolean)
+    .sort((a, b) => a.index - b.index);
+
+  let pauseCursor = 0;           // penunjuk jeda berikutnya
+  const normalDelay = 40;        // kecepatan ketik normal
+
+  function typeWriter() {
+    if (i < text.length) {
+      const char = text.charAt(i);
+      typingElement.innerHTML += (char === "\n") ? "<br>" : char;
+      i++;
+
+      // cek apakah tepat di titik jeda
+      let delay = normalDelay;
+      if (pauseCursor < pausePoints.length && i === pausePoints[pauseCursor].index) {
+        delay = pausePoints[pauseCursor].delay;
+        pauseCursor++; // pastikan jeda hanya terjadi sekali
+      }
+
+      setTimeout(typeWriter, delay);
+    } else {
+      // selesai → tampilkan tombol
+      const buttons = document.getElementById("choiceButtons");
+      if (buttons) {
+        buttons.style.display = "flex";
+        setTimeout(() => buttons.classList.add("show"), 100);
+      }
+    }
+  }
+
+  setTimeout(typeWriter, 800);
+</script>
+
+
+
+
+    <!-- SCRIPT UNTUK LIGHTBOX FOTO -->
+    <script>
+        const images = document.querySelectorAll('.photo img');
+        const lightbox = document.getElementById('lightbox');
+        const lightboxImg = document.getElementById('lightboxImg');
+        const closeBtn = document.getElementById('closeBtn');
+        const prevBtn = document.getElementById('prevBtn');
+        const nextBtn = document.getElementById('nextBtn');
+        let currentIndex = 0;
+        let scale = 1;
+
+        images.forEach((img, index) => {
+            img.addEventListener('click', (e) => {
+                e.preventDefault();
+                currentIndex = index;
+                showImage();
+                lightbox.style.display = 'flex';
+            });
+        });
+
+        function showImage() {
+            scale = 1.2;
+            lightboxImg.src = images[currentIndex].src;
+            lightboxImg.style.transform = `scale(${scale})`;
+        }
+
+        closeBtn.addEventListener('click', () => {
+            lightbox.style.display = 'none';
+        });
+
+        prevBtn.addEventListener('click', () => {
+            currentIndex = (currentIndex - 1 + images.length) % images.length;
+            showImage();
+        });
+
+        nextBtn.addEventListener('click', () => {
+            currentIndex = (currentIndex + 1) % images.length;
+            showImage();
+        });
+
+        lightbox.addEventListener('click', (e) => {
+            if (e.target === lightbox) {
+                lightbox.style.display = 'none';
+            }
+        });
+
+        lightboxImg.addEventListener('wheel', (e) => {
+            e.preventDefault();
+            if (e.deltaY < 0) {
+                scale += 0.1;
+            } else {
+                scale = Math.max(1, scale - 0.1);
+            }
+            lightboxImg.style.transform = `scale(${scale})`;
+        });
+    </script>
+
+<script src="/js/script.js"></script>
+
+</body>
+</html>

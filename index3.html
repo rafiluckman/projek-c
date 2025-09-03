@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Our Photo</title>
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cabin+Sketch:wght@400;700&family=Delius&display=swap" rel="stylesheet">
+
+  <link rel="icon" type="image/png" href="/assets/imut-removebg-preview.png" />
+  <link rel="stylesheet" href="/css/style2.css" />
+
+  <style>
+    /* Fade-in seluruh halaman */
+    body {
+      opacity: 0;
+      transition: opacity 1.2s ease-in-out;
+    }
+    body.loaded {
+      opacity: 1;
+    }
+
+    /* Kontainer musik */
+    .music-player {
+      position: fixed;
+      bottom: 20px;
+      left: 20px;
+      background: rgba(0, 0, 0, 0.5);
+      padding: 10px 16px;
+      border-radius: 10px;
+      backdrop-filter: blur(6px);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      z-index: 1000;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+    }
+
+    .music-player button {
+      background: #00f7ff;
+      color: white;
+      border: none;
+      padding: 6px 10px;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 14px;
+      transition: background 0.3s ease;
+    }
+
+    .music-player button:hover {
+      background: #00c8d9;
+    }
+
+    .music-player span {
+      color: white;
+      font-size: 14px;
+      font-weight: bold;
+    }
+  </style>
+</head>
+
+
+
+<body>
+  <!-- BACKGROUND crossfade + kenburns -->
+  <div class="bg-container">
+    <div class="bg-image active" id="bgA"></div>
+    <div class="bg-image" id="bgB"></div>
+  </div>
+
+  <!-- GALERI -->
+  <div class="gallery-container">
+    <!-- Deskripsi -->
+    <div class="description-box" id="descBox">
+      <h2 id="photo-title">Foto 1</h2>
+      <p id="photo-description">Inget ga, ini foto pertama kali kita ketemu loh, di Indo Voice, 14/04/2025 ❤️</p>
+    </div>
+
+    <!-- Foto -->
+    <div class="photo-box">
+      <div class="photo-wrapper">
+        <img id="main-photo" src="/assets/1.jpeg" alt="Foto 1" />
+        <img id="preview-photo" class="preview-blur" src="/assets/2.png" alt="Foto berikutnya" />
+      </div>
+    </div>
+  </div>
+
+  <!-- Tombol -->
+  <div class="controls">
+    <button id="prevBtn" class="nav-btn" aria-label="Sebelumnya">&#8592;</button>
+    <button id="nextBtn" class="nav-btn" aria-label="Berikutnya">&#8594;</button>
+  </div>
+
+  <!-- Lightbox -->
+  <div id="lightbox" class="lightbox">
+    <span id="closeLightbox" class="close">&times;</span>
+    <img id="lightboxImg" src="" alt="Preview Foto" />
+  </div>
+
+  <!-- Pemutar Musik -->
+  <div class="music-player">
+    <button id="playPauseBtn">⏸ Pause</button>
+    <span>Now Playing: The Night We Met 🎵</span>
+    <audio id="bgMusic" src="/assets/lagu4.mp3" autoplay loop></audio>
+  </div>
+
+  <script>
+    const bgMusic = document.getElementById("bgMusic");
+const playPauseBtn = document.getElementById("playPauseBtn");
+
+    const photos = [
+      { src: "/assets/1.jpeg", title: "First Meet 💑", desc: "Inget ga, ini foto pertama kali kita ketemu loh, di Indo Voice, 14/04/2025,dan waktu itu ava ku masih jelek tau wkwk,dan awal pertemuan kita ada uja ada kodokmbengkok,aku jadi kangen." },
+      { src: "/assets/2.png",  title: "Pat Pat 😺", desc: "Aku di patpat bocil jir,nah kalo kmu inget ini di map indo camp ges,waktu itu aku baru dandanin ava ku biar ganteng,dan ava itu udah ga ku pake lagi cik 😂" },
+      { src: "/assets/3.png",  title: "Map yang banyak tempat duduk 🦨", desc: "Kita lucu banget gasih disini?,mana tangan kamu kicik lagi🤏" },
+      { src: "/assets/4.png",  title: "Disini kita gengsta gasih? 😎🔫", desc: "Foto paling favorit ku ini,soalnya aku ganteng banget jir disini,kamu juga kok cantik bgt avanya disini wkwkwk" },
+      { src: "/assets/6.png",  title: "ini waktu dimana..", desc: "pas itu kamu minta udahan,bulan mei dan kita balik lagi 3 hari setelahnya,dan malam itu malam dimana aku bersyukur kamu balik lagi,karena aku kangen banget cuyy sama kamu,dan di map itu kita nulis kertas,masih inget gaa ehhe" },
+      { src: "/assets/7.png",  title: "Malam dimana kita jujur jujuran soal umur dan keluarga", desc: "Tempat pertama kali aku jujur ya disini, aku kangen masa dimana aku awal dekatin kamu tau,dan pas itu kalo kamu ingat aku bohong kan kalo aku udah semester 3,padahal MABA  jir🤣" },
+      { src: "/assets/8.png",  title: "......", desc: "Foto imut khas bandung dan papua 💕" },
+      { src: "/assets/9.png",  title: "Neduh mbak?", desc: "kamu kerasa gasi nostalgia nya pas disini?,aku sih iya kerasa,kan ada kamu anjai" }
+    ];
+
+    const backgrounds = [
+      "/assets/bg1.png",
+      "/assets/bg2.png",
+      "/assets/bg3.png",
+      "/assets/bg4.png",
+      "/assets/bg5.png",
+      "/assets/bg6.png",
+      "/assets/bg7.png",
+      "/assets/bg8.png"
+    ];
+
+    let currentIndex = 0;
+    let showA = true;
+
+    const mainPhoto = document.getElementById("main-photo");
+    const preview   = document.getElementById("preview-photo");
+    const titleEl   = document.getElementById("photo-title");
+    const descEl    = document.getElementById("photo-description");
+    const descBox   = document.getElementById("descBox");
+    const bgA = document.getElementById("bgA");
+    const bgB = document.getElementById("bgB");
+
+    function setContent(i) {
+      mainPhoto.src = photos[i].src;
+      preview.src   = photos[(i + 1) % photos.length].src;
+      titleEl.textContent = photos[i].title;
+      descEl.textContent  = photos[i].desc;
+    }
+
+    function crossfadeBackground(i) {
+      const nextURL = backgrounds[i];
+      const active = showA ? bgA : bgB;
+      const idle   = showA ? bgB : bgA;
+
+      idle.style.backgroundImage = `url('${nextURL}')`;
+      idle.classList.remove("kenburns");
+      void idle.offsetWidth;
+      idle.classList.add("kenburns");
+
+      active.classList.remove("active");
+      idle.classList.add("active");
+
+      showA = !showA;
+    }
+
+    function playPreviewAppear(direction) {
+      preview.classList.remove("preview-next");
+      preview.classList.remove("preview-prev");
+      void preview.offsetWidth;
+      preview.classList.add(direction === "next" ? "preview-next" : "preview-prev");
+    }
+
+    function animateSwitch(direction) {
+      const outCls = direction === "next" ? "photo-out-left" : "photo-out-right";
+      const inCls  = direction === "next" ? "photo-in-right" : "photo-in-left";
+
+      mainPhoto.classList.add(outCls);
+      descBox.classList.add(outCls);
+
+      setTimeout(() => {
+        currentIndex = (currentIndex + (direction === "next" ? 1 : -1) + photos.length) % photos.length;
+
+        setContent(currentIndex);
+        crossfadeBackground(currentIndex);
+
+        mainPhoto.classList.remove(outCls);
+        descBox.classList.remove(outCls);
+
+        mainPhoto.classList.add(inCls);
+        descBox.classList.add(inCls);
+
+        playPreviewAppear(direction);
+      }, 260);
+
+      setTimeout(() => {
+        mainPhoto.classList.remove(inCls);
+        descBox.classList.remove(inCls);
+      }, 900);
+    }
+
+    document.getElementById("nextBtn").addEventListener("click", () => animateSwitch("next"));
+    document.getElementById("prevBtn").addEventListener("click", () => animateSwitch("prev"));
+
+    const lightbox    = document.getElementById("lightbox");
+    const lightboxImg = document.getElementById("lightboxImg");
+    const closeBtn    = document.getElementById("closeLightbox");
+
+    mainPhoto.addEventListener("click", () => {
+      lightbox.style.display = "flex";
+      lightboxImg.src = photos[currentIndex].src;
+    });
+    closeBtn.addEventListener("click", () => lightbox.style.display = "none");
+    lightbox.addEventListener("click", (e) => { if (e.target === lightbox) lightbox.style.display = "none"; });
+
+    // Fade-in efek saat halaman selesai dimuat
+    window.addEventListener("load", () => {
+      document.body.classList.add("loaded");
+    });
+
+    setContent(currentIndex);
+    bgA.style.backgroundImage = `url('${backgrounds[currentIndex]}')`;
+    bgA.classList.add("kenburns");
+  </script>
+
+<script src="/script.js"></script>
+
+
+</body>
+</html>
