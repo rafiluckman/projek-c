@@ -25,7 +25,19 @@
       <!-- Musik Background -->
     <audio id="bg-music" autoplay loop muted>
     <source src="assets/miaw.mp3" type="audio/mpeg">
-</audio>
+    </audio>
+<script>
+  document.addEventListener("DOMContentLoaded", () => {
+    const audio = document.getElementById("bg-music");
+    audio.play().catch(() => {
+      console.log("Autoplay diblokir, tunggu interaksi user...");
+    });
+    document.body.addEventListener("click", () => {
+      audio.muted = false;
+      audio.play();
+    }, { once: true });
+  });
+</script>
     <!-- Tombol -->
     <a href="index2.html" class="btn">Open</a>
   </div>
@@ -50,4 +62,5 @@
   </script>
 </body>
 </html>
+
 
